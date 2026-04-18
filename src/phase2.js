@@ -189,8 +189,14 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
     galaxyParticles.rotation.y = time * 0.02;
   }
 
-  camera.position.x += (touchX * 8 - camera.position.x) * 0.05;
-  camera.position.y += (-touchY * 8 - camera.position.y) * 0.05;
+  if (galaxyParticles.state === 'heart' || galaxyParticles.state === 'name' || galaxyParticles.state === 'transition') {
+    // Al mirar el corazón o nombre, bloqueamos la cámara al centro para que no se mueva hacia la izquierda si toca la pantalla
+    camera.position.x += (0 - camera.position.x) * 0.05;
+    camera.position.y += (0 - camera.position.y) * 0.05;
+  } else {
+    camera.position.x += (touchX * 8 - camera.position.x) * 0.05;
+    camera.position.y += (-touchY * 8 - camera.position.y) * 0.05;
+  }
 
   wordElements.forEach((el, index) => {
     wordPositions[index].z += 10 * dt; 
