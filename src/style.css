@@ -229,7 +229,7 @@ body, html {
   left: 0;
   font-family: 'Great Vibes', cursive;
   color: #fff;
-  text-shadow: 0 0 10px #fbc2eb, 0 0 20px #ff9a9e, 0 0 40px #ff9a9e;
+  text-shadow: 0 0 3px #fff, 0 0 10px #ff9a9e, 0 0 20px #ff9a9e;
   opacity: 0;
   transform-origin: center center;
   pointer-events: none;
