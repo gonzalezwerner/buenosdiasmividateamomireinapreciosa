@@ -205,6 +205,7 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
     // Más lento: bajamos la aceleracion z de 10 a 4
     wordPositions[index].z += 4 * dt; 
     
+    if(wordPositions[index].z > camera.position.z + 5) {
       // Lo mandamos hasta el final de la cola para que respawnee muy atrás solo
       wordPositions[index].z = camera.position.z - 200 - Math.random() * 50;
       wordPositions[index].x = (Math.random() - 0.5) * 8;
