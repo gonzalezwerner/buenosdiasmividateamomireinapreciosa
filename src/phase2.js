@@ -33,8 +33,6 @@ export function initPhase2() {
     new THREE.Color('#fbc2eb')
   ];
 
-  generateNamePositions(namePositions, count);
-
   for(let i=0; i<count; i++) {
     const r = 20 + Math.random() * 80;
     const theta = Math.random() * 2 * Math.PI;
@@ -178,7 +176,9 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
   if (!galaxyParticles) return;
   
   if(galaxyParticles.state === 'heart') {
-    galaxyParticles.rotation.y = time * 0.1;
+    // Solo latidos, sin rotar sobre su eje central para que no se arruine
+    galaxyParticles.rotation.y = 0; 
+    galaxyParticles.rotation.x = 0;
     const scale = 1 + Math.sin(time * 5) * 0.05;
     galaxyParticles.scale.set(scale, scale, scale);
   } else if (galaxyParticles.state === 'name') {
@@ -270,6 +270,9 @@ export function formHeartConstellation(onComplete) {
 
 export function formNameConstellation(onComplete) {
   let proxy = { val: 0 };
+  const count = galaxyParticles.geometry.attributes.position.array.length / 3;
+  generateNamePositions(namePositions, count); // Generar en este instante garantiza que la tipografía externa ya cargó completamente
+  
   const positions = galaxyParticles.geometry.attributes.position.array;
   
   // Save current (heart) positions as starting point for this morph
