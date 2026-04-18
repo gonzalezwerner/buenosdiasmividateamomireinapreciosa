@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>El Universo de Nuestro Amor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Prevents Flash of Unstyled Content (FOUC) while Vite injects main CSS */
+    .phase-ui { opacity: 0; pointer-events: none; display: none; }
+    .phase-ui.active { opacity: 1; pointer-events: auto; display: flex !important; }
+  </style>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  <div id="ui-layer">
+    <div id="phase1-ui" class="phase-ui active">
+      <div class="heartbeat-text" id="start-btn">Toca para despertar</div>
+    </div>
+    
+    <div id="phase2-ui" class="phase-ui">
+      <div class="subtitle">Desliza para viajar por las estrellas</div>
+      <div class="constellation-msg" id="c-msg"></div>
+    </div>
+    
+    <div id="phase3-ui" class="phase-ui">
+      <div class="subtitle">El amanecer nos encuentra...</div>
+    </div>
+
+    <div id="phase4-ui" class="phase-ui" style="display: none;">
+      <div class="letter-container">
+        <h1 class="romantic-title">Buenos Días, Mi Vida</h1>
+        <p class="letter-text"></p>
+        <button id="reply-btn">Responder a mi amor</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
