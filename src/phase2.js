@@ -93,17 +93,18 @@ export function initPhase2() {
   wordContainer.id = 'words-container';
   document.getElementById('ui-layer').appendChild(wordContainer);
 
-  wordsList.forEach((text) => {
+  wordsList.forEach((text, index) => {
     let el = document.createElement('div');
     el.className = 'floating-word';
     el.innerText = text;
     wordContainer.appendChild(el);
     wordElements.push(el);
 
-    // Para que pasen exactamente por el marco del celular (centradas)
-    let wx = (Math.random() - 0.5) * 6;
-    let wy = (Math.random() - 0.5) * 6;
-    let wz = -40 - (Math.random() * 60); 
+    // X y Y con separación suave para que no queden 100% estáticas, 
+    // PERO la clave es separarlas enormemente en la profundidad Z (usando su Index)
+    let wx = (Math.random() - 0.5) * 8;
+    let wy = (Math.random() - 0.5) * 8;
+    let wz = -40 - (index * 30) - (Math.random() * 10); // Una por una ordenadas como túnel
     wordPositions.push(new THREE.Vector3(wx, wy, wz));
   });
 }
@@ -204,11 +205,10 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
     // Más lento: bajamos la aceleracion z de 10 a 4
     wordPositions[index].z += 4 * dt; 
     
-    // Si cruzan la camara, se respawnean MUY cerca del X=0, Y=0 (centro del movil)
-    if(wordPositions[index].z > camera.position.z + 5) {
-      wordPositions[index].z = camera.position.z - 80 - Math.random() * 20;
-      wordPositions[index].x = (Math.random() - 0.5) * 6;
-      wordPositions[index].y = (Math.random() - 0.5) * 6;
+      // Lo mandamos hasta el final de la cola para que respawnee muy atrás solo
+      wordPositions[index].z = camera.position.z - 200 - Math.random() * 50;
+      wordPositions[index].x = (Math.random() - 0.5) * 8;
+      wordPositions[index].y = (Math.random() - 0.5) * 8;
     }
 
     const pos3D = wordPositions[index].clone();
@@ -293,8 +293,8 @@ export function formNameConstellation(onComplete) {
   gsap.to(galaxyParticles.rotation, {x:0, y:0, z:0, duration: 2});
   
   // Como las estrellas se amontonan mucho en las letras, la luz se suma y se vuelve blanca (Additive Blending).
-  // Bajamos la opacidad del material a la mitad para que mantenga sus colores rosados/morados originales.
-  gsap.to(galaxyParticles.material, { opacity: 0.45, duration: 3 });
+  // Bajamos la opacidad del material drásticamente a 0.15 para que mantenga sus colores rosados/morados originales y no queme la pantalla.
+  gsap.to(galaxyParticles.material, { opacity: 0.15, duration: 3 });
 
   gsap.to(proxy, {
     val: 1,
