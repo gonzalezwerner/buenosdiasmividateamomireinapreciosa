@@ -100,10 +100,10 @@ export function initPhase2() {
     wordContainer.appendChild(el);
     wordElements.push(el);
 
-    // Separación ajustada para que el túnel completo se recorra en plazos calculados (~40 segundos)
-    let wx = (Math.random() - 0.5) * 8;
-    let wy = (Math.random() - 0.5) * 8;
-    let wz = -40 - (index * 20) - (Math.random() * 5); // Index * 20 (Distancia entre palabra y palabra)
+    // Separación gigante (40 unidades) para asegurar que NUNCA se vean dos a la vez
+    let wx = (Math.random() - 0.5) * 6;
+    let wy = (Math.random() - 0.5) * 6;
+    let wz = -40 - (index * 40) - (Math.random() * 2); 
     wordPositions.push(new THREE.Vector3(wx, wy, wz));
   });
 }
@@ -203,8 +203,8 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
   }
 
   wordElements.forEach((el, index) => {
-    // Velocidad crucero elegante (6 unidades por segundo)
-    wordPositions[index].z += 6 * dt; 
+    // Incrementamos la velocidad (15 u/s) para cubrir la nueva inmensa separación en 38 segundos
+    wordPositions[index].z += 15 * dt; 
     
     if(wordPositions[index].z > camera.position.z + 5) {
       // Lo mandamos hasta el final de la cola para que respawnee muy atrás solo
@@ -227,8 +227,9 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
     const distance = camera.position.distanceTo(wordPositions[index]);
     
     let op = 0;
-    if(distance > 5 && distance < 60) {
-      op = Math.sin((distance - 5) / 55 * Math.PI); 
+    // Solo permitimos que se vea la palabra si está a menos de 40 unidades (asegurando 1 sola palabra en pantalla)
+    if(distance > 8 && distance < 45) {
+      op = Math.sin((distance - 8) / 37 * Math.PI); 
     }
     el.style.opacity = op * 0.9;
     
