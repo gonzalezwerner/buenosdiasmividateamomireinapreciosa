@@ -62,8 +62,8 @@ export function initPhase2() {
     const noiseZ = (Math.random()-0.5)*6;
 
     heartPositions[i*3] = heartX + noiseX;
-    heartPositions[i*3+1] = heartY + noiseY;
-    heartPositions[i*3+2] = -100 + noiseZ; // Push much further back away from camera (-35)
+    heartPositions[i*3+1] = heartY + noiseY + (6 * scale); // Desplazar hacia arriba para centrar en Y
+    heartPositions[i*3+2] = -100 + noiseZ;  // Push much further back away from camera (-35)
 
     const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
     colors[i*3] = color.r;
@@ -138,9 +138,9 @@ function generateNamePositions(array, count) {
     if(validPixels.length > 0) {
       const p = validPixels[Math.floor(Math.random() * validPixels.length)];
       // map to 3d world coordinates but scale down for strict mobile portrait width
-      array[i*3] = (p.x - canvas.width/2) * 0.045; // reduced spread
-      array[i*3+1] = -(p.y - canvas.height/2) * 0.045; // reduced spread
-      array[i*3+2] = -100 + (Math.random()-0.5)*4; // Push exactly as far back as the heart (-100)
+      array[i*3] = (p.x - canvas.width/2) * 0.045; 
+      array[i*3+1] = -(p.y - canvas.height/2) * 0.045; 
+      array[i*3+2] = -100 + (Math.random()-0.5)*15; // Mayor esparcimiento en Z para que no se difumine (Unreal Bloom)
     } else {
       array[i*3] = 0; array[i*3+1] = 0; array[i*3+2] = -100;
     }
