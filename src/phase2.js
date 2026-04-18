@@ -100,11 +100,10 @@ export function initPhase2() {
     wordContainer.appendChild(el);
     wordElements.push(el);
 
-    // X y Y con separación suave para que no queden 100% estáticas, 
-    // PERO la clave es separarlas enormemente en la profundidad Z (usando su Index)
+    // Separación ajustada para que el túnel completo se recorra en plazos calculados (~40 segundos)
     let wx = (Math.random() - 0.5) * 8;
     let wy = (Math.random() - 0.5) * 8;
-    let wz = -40 - (index * 30) - (Math.random() * 10); // Una por una ordenadas como túnel
+    let wz = -40 - (index * 20) - (Math.random() * 5); // Index * 20 (Distancia entre palabra y palabra)
     wordPositions.push(new THREE.Vector3(wx, wy, wz));
   });
 }
@@ -117,7 +116,8 @@ function generateNamePositions(array, count) {
 
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = 'bold 150px "Great Vibes", cursive, serif';
+  ctx.font = 'bold 160px "Great Vibes", cursive, serif';
+  ctx.letterSpacing = '15px'; // Darle espacio entre las letras para que respiren y se lean perfectas
   ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -139,9 +139,10 @@ function generateNamePositions(array, count) {
     if(validPixels.length > 0) {
       const p = validPixels[Math.floor(Math.random() * validPixels.length)];
       // map to 3d world coordinates but scale down for strict mobile portrait width
-      array[i*3] = (p.x - canvas.width/2) * 0.045; 
-      array[i*3+1] = -(p.y - canvas.height/2) * 0.045; 
-      array[i*3+2] = -100 + (Math.random()-0.5)*15; // Mayor esparcimiento en Z para que no se difumine (Unreal Bloom)
+      array[i*3] = (p.x - canvas.width/2) * 0.055;  // Lo hacemos un poco más ancho
+      array[i*3+1] = -(p.y - canvas.height/2) * 0.055; 
+      // ELIMINAMOS la variación de profundidad Z mayor a 1 unidad. Si z varía, la perspectiva 3D destruye la forma 2D haciéndola borrosa
+      array[i*3+2] = -100 + (Math.random()-0.5)*1; 
     } else {
       array[i*3] = 0; array[i*3+1] = 0; array[i*3+2] = -100;
     }
@@ -202,8 +203,8 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
   }
 
   wordElements.forEach((el, index) => {
-    // Más lento: bajamos la aceleracion z de 10 a 4
-    wordPositions[index].z += 4 * dt; 
+    // Velocidad crucero elegante (6 unidades por segundo)
+    wordPositions[index].z += 6 * dt; 
     
     if(wordPositions[index].z > camera.position.z + 5) {
       // Lo mandamos hasta el final de la cola para que respawnee muy atrás solo
