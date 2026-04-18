@@ -10,8 +10,9 @@ let namePositions;
 let shootingStars = [];
 
 const wordsList = [
-  "Mi Vida", "Luz de mis ojos", "Mi Amor", "Preciosa", 
-  "Dueña de mí", "Estrella fugaz", "Sonrisa perfecta", "Mi Universo"
+  "Mi Reina", "Luz de mis ojos", "Princesa", "Preciosa", 
+  "Dueña de mi corazón", "Eres magia pura", "Sonrisa perfecta", "Mi Universo",
+  "Te amo", "Mi refugio", "Mujer única", "Mi Todo", "Hermosa", "Eternidad"
 ];
 const wordElements = [];
 const wordPositions = [];
@@ -99,9 +100,10 @@ export function initPhase2() {
     wordContainer.appendChild(el);
     wordElements.push(el);
 
-    let wx = (Math.random() - 0.5) * 50;
-    let wy = (Math.random() - 0.5) * 30;
-    let wz = -40 - (Math.random() * 80); 
+    // Para que pasen exactamente por el marco del celular (centradas)
+    let wx = (Math.random() - 0.5) * 6;
+    let wy = (Math.random() - 0.5) * 6;
+    let wz = -40 - (Math.random() * 60); 
     wordPositions.push(new THREE.Vector3(wx, wy, wz));
   });
 }
@@ -199,12 +201,14 @@ export function updatePhase2(time, touchX, touchY, dt = 0.016) {
   }
 
   wordElements.forEach((el, index) => {
-    wordPositions[index].z += 10 * dt; 
+    // Más lento: bajamos la aceleracion z de 10 a 4
+    wordPositions[index].z += 4 * dt; 
     
+    // Si cruzan la camara, se respawnean MUY cerca del X=0, Y=0 (centro del movil)
     if(wordPositions[index].z > camera.position.z + 5) {
-      wordPositions[index].z = camera.position.z - 80 - Math.random() * 40;
-      wordPositions[index].x = (Math.random() - 0.5) * 50;
-      wordPositions[index].y = (Math.random() - 0.5) * 30;
+      wordPositions[index].z = camera.position.z - 80 - Math.random() * 20;
+      wordPositions[index].x = (Math.random() - 0.5) * 6;
+      wordPositions[index].y = (Math.random() - 0.5) * 6;
     }
 
     const pos3D = wordPositions[index].clone();
@@ -287,6 +291,10 @@ export function formNameConstellation(onComplete) {
   galaxyParticles.state = 'transition';
   gsap.to(galaxyParticles.scale, {x:1, y:1, z:1, duration: 1}); // Reset heart pulse
   gsap.to(galaxyParticles.rotation, {x:0, y:0, z:0, duration: 2});
+  
+  // Como las estrellas se amontonan mucho en las letras, la luz se suma y se vuelve blanca (Additive Blending).
+  // Bajamos la opacidad del material a la mitad para que mantenga sus colores rosados/morados originales.
+  gsap.to(galaxyParticles.material, { opacity: 0.45, duration: 3 });
 
   gsap.to(proxy, {
     val: 1,
