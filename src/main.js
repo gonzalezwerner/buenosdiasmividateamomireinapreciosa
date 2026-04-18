@@ -82,7 +82,7 @@ function triggerPhase1Explosion() {
           
         });
       });
-    }, 15000); // 15 seconds watching shooting stars
+    }, 38000); // 38 seconds watching shooting stars and reading all 14 words before heart forms
   });
 }
 
