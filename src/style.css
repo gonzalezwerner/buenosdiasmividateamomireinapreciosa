@@ -1,0 +1,239 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
+  font-family: 'Montserrat', sans-serif;
+  touch-action: none; /* Prevent default touch actions like pull-to-refresh */
+}
+
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.phase-ui {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 2s ease;
+  pointer-events: none;
+}
+
+.phase-ui.active {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Phase 1 */
+.heartbeat-text {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  letter-spacing: 3px;
+  animation: pulse 2s infinite ease-in-out;
+  text-shadow: 0 0 10px rgba(255,255,255,0.8);
+  cursor: pointer;
+  pointer-events: auto; /* Clickable */
+  padding: 20px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,1); }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+/* Phase 2 & 3 subtitle */
+.subtitle {
+  position: absolute;
+  bottom: 15%;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  opacity: 0.8;
+  pointer-events: none;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.constellation-msg {
+  position: absolute;
+  top: 20%;
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.5rem;
+  color: #ffd700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+/* Phase 4 */
+/* Phase 4 Ultra Romantic Base */
+.letter-container {
+  background: rgba(10, 0, 0, 0.45);
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
+  border: 1px solid rgba(255, 215, 0, 0.2); 
+  border-radius: 20px;
+  padding: 50px 30px;
+  max-width: 92%;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(248, 181, 0, 0.05);
+  transform: translateY(100px) scale(0.9);
+  opacity: 0;
+  transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 3s;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Shining light moving over the card magically */
+.letter-container::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 50%);
+  animation: sweep 12s infinite linear;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.phase-ui.active .letter-container {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.romantic-title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Great Vibes', cursive;
+  font-size: 3.8rem;
+  background: -webkit-linear-gradient(#fceabb, #f8b500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
+  filter: drop-shadow(0 0 10px rgba(248, 181, 0, 0.4));
+  line-height: 1.1;
+}
+
+.letter-text {
+  position: relative;
+  z-index: 1;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  color: #fff;
+  font-weight: 300;
+  font-family: 'Montserrat', sans-serif;
+  text-shadow: 0 0 5px rgba(255,255,255,0.3);
+  text-align: left;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2rem;
+  background-color: #f8b500;
+  animation: blink 1s step-end infinite;
+  box-shadow: 0 0 8px #f8b500;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+}
+
+#reply-btn {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg, #f8b500 0%, #ffcc33 100%);
+  color: #3f1e00;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 16px 40px;
+  border-radius: 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(248, 181, 0, 0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+#reply-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 40px rgba(248, 181, 0, 0.8);
+}
+
+/* Floating Space Words */
+#words-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+  transition: opacity 2s;
+  opacity: 0;
+}
+
+.floating-word {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: 'Great Vibes', cursive;
+  color: #fff;
+  text-shadow: 0 0 10px #fbc2eb, 0 0 20px #ff9a9e, 0 0 40px #ff9a9e;
+  opacity: 0;
+  transform-origin: center center;
+  pointer-events: none;
+  font-size: 3rem;
+  font-weight: 400;
+  will-change: transform, opacity;
+}
